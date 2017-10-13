@@ -1,93 +1,83 @@
-<App Theme="Basic">
-		<Community.Api ux:Global="CommunityApi" />
+<App>
+	<JavaScript>
+	var Observable = require("FuseJS/Observable");
 
-	<DockPanel>
-		<JavaScript>
+	var Crypto = require("Cryptography");
 
-			var Observable = require("FuseJS/Observable");
-			var Utils = require("CommunityApi");
-			Utils.setAppSalt("Lowry's");
-			Utils.setAppPepper("Seasoned");
+	Crypto.setAppSalt("Lowry's");
+	Crypto.setAppPepper("Seasoned");
 
-			var userName = "jimmy";
-			var salt = userName;
-			var pwd = "ultraSecretPwd12345678910";
+	var userName = "igorls";
+	var salt = userName;
+	var pwd = Observable("ultraSecretPwd12345678910");
+	var hash = Observable("");
+	var hashNoSalt = Observable("");
+	var hash512 = Observable("");
+	var hashNoSalt512 = Observable("");
+	var firstOTP = Observable("");
+	var fifteenthOTP = Observable("");
 
-			var hash = Utils.hashPassword(pwd,salt);
-			debug_log("Uno pwd:" + hash);
+	function hashPass() {
+		hash.value = Crypto.hashPassword(pwd.value,salt);
+		debug_log("Uno pwd:" + hash);
 
-			var hashNoSalt = Utils.hashPassword(pwd);
-			debug_log("Uno pwd NO SALT: " + hashNoSalt);
+		hashNoSalt.value = Crypto.hashPassword(pwd.value);
+		debug_log("Uno pwd NO SALT: " + hashNoSalt);
 
-			var hash512 = Utils.hashPassword512(pwd,salt);
-			debug_log("Uno pwd 512:" + hash512);
+		hash512.value = Crypto.hashPassword512(pwd.value,salt);
+		debug_log("Uno pwd 512:" + hash512);
 
-			var hashNoSalt512 = Utils.hashPassword512(pwd);
-			debug_log("Uno pwd 512 NO SALT: " + hashNoSalt512);
-	
-			Utils.setAppSalt("");
-			Utils.setAppPepper("");
-			var firstOTP= Utils.getOTP(1, pwd); 
-			debug_log("First One-Time Password: " + firstOTP);
-			var fifteenthOTP = Utils.getOTP(15,pwd);
-			debug_log("Fifteenth One-Time Password: " + fifteenthOTP);
-			Utils.generateCodes();
+		hashNoSalt512.value = Crypto.hashPassword512(pwd.value);
+		debug_log("Uno pwd 512 NO SALT: " + hashNoSalt512);
 
-			module.exports = {
-				firstOTP: firstOTP,
-				fifteenthOTP: fifteenthOTP,
-				userName:userName,
-				pwd:pwd,
-				hash:hash,
-				hashNoSalt:hashNoSalt,
-				hash512:hash512,
-				hashNoSalt512:hashNoSalt512
+		Crypto.setAppSalt("");
+		Crypto.setAppPepper("");
 
-			};
+		firstOTP.value = Crypto.getOTP(1, pwd.value);
+		debug_log("First One-Time Password: " + firstOTP);
+		fifteenthOTP.value = Crypto.getOTP(15,pwd.value);
+		debug_log("Fifteenth One-Time Password: " + fifteenthOTP);
+	}
 
+	module.exports = {
+		hashPass,
+		firstOTP,
+		fifteenthOTP,
+		userName,
+		pwd,
+		hash,
+		hashNoSalt,
+		hash512,
+		hashNoSalt512
+	};
 
-		</JavaScript>
+	</JavaScript>
 
-		<StatusBarBackground Dock="Top" />
-		<BottomFrameBackground Dock="Bottom" />
+	<Rectangle ux:Class="HScrollDisplay" Margin="4">
+		<Stroke Width="1" Color="#C0C0C0"/>
+		<string ux:Property="Label"/>
+		<string ux:Property="Value"/>
+		<StackPanel>
+			<Text Value="{ReadProperty Label}" FontSize="18" Alignment="Left" Margin="5"/>
+			<Rectangle Width="95%" Height="1" Color="#D1D1D1"/>
+			<ScrollView Width="100%" AllowedScrollDirections="Horizontal">
+				<Text Margin="8" FontSize="18" Value="{ReadProperty Value}"/>
+			</ScrollView>
+		</StackPanel>
+	</Rectangle>
 
-
+	<ClientPanel>
 		<ScrollView>
 			<StackPanel Alignment="Top" Orientation="Vertical">
-					<StackPanel Orientation="Horizontal">
-							<Text Value="User Name: "/>
-							<Text Value="{userName}"/>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-							<Text Value="Password: "/>
-							<Text Value="{pwd}"/>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-							<Text Value="Sha256 Hash: "/>
-							<Text Value="{hash}"/>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-							<Text Value="Sha256 Hash (No Salt): "/>
-							<Text Value="{hashNoSalt}"/>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-							<Text Value="Sha512 Hash: "/>
-							<Text Value="{hash512}"/>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-							<Text Value="Sha512 Hash (No Salt): "/>
-							<Text Value="{hashNoSalt512}"/>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-							<Text Value="One Time Password (instance 1)"/>
-							<Text Value="{firstOTP}"/>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-							<Text Value="One Time Password (instance 15)"/>
-							<Text Value="{fifteenthOTP}"/>
-					</StackPanel>
+				<Basic.TextInput Value="{pwd}"/>
+				<Basic.Button Text="Generate Hashes &#38; One Time Pass" Clicked="{hashPass}"/>
+				<HScrollDisplay Label="Sha256 Hash" Value="{hash}"/>
+				<HScrollDisplay Label="Sha256 Hash (No Salt)" Value="{hashNoSalt}"/>
+				<HScrollDisplay Label="Sha512 Hash" Value="{hash512}"/>
+				<HScrollDisplay Label="Sha512 Hash (No Salt)" Value="{hashNoSalt512}"/>
+				<HScrollDisplay Label="One Time Password (instance 1)" Value="{firstOTP}"/>
+				<HScrollDisplay Label="One Time Password (instance 15)" Value="{fifteenthOTP}"/>
 			</StackPanel>
-
 		</ScrollView>
-	</DockPanel>
+	</ClientPanel>
 </App>

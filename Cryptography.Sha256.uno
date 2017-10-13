@@ -4,7 +4,7 @@ using Uno.Collections;
 using Uno.Text;
 using Fuse;
 
-namespace Community.Cryptography
+namespace Cryptography
 {
 
     //Sha256 algorithm from: http://hashlib.codeplex.com/
@@ -13,60 +13,31 @@ namespace Community.Cryptography
     // PORTED TO UNO WITH BASIC REFACTORING: Sean McKay, 2015
 
     public class Converters
-    {    	
-/*
-        public static byte[] ConvertULongToBytes(ulong u)
-        {
-            MemoryStream s= new MemoryStream();
-            BinaryWriter bw = new BinaryWriter(s);
-            BinaryReader br = new BinaryReader(s);
-
-            bw.Write(u);
-            return br.ReadBytes((int)s.Length);
-        }
-
-        public static ulong ConvertBytesToULong(byte[] byts)
-        {
-            MemoryStream s = new MemoryStream();
-            BinaryWriter bw = new BinaryWriter(s);
-            BinaryReader br = new BinaryReader(s);
-
-            foreach(byte b in byts)
-                bw.Write(b);
-            return br.ReadULong();
-        }
-
-        public static bool IsOdd(byte toCheck)
-        {
-            return toCheck % 2 == 1;
-        }
-
-        public static ulong ShiftRight(ulong toShift)
-        {
-            byte[] byts = ConvertULongToBytes(toShift);
-
-
-            return ConvertBytesToULong(byts);
-
-        }*/
-
+    {
         public static string ConvertBytesToHexString (byte[] a_in, bool a_group = true)
         {
             string hex = BitConverter.ToHex (a_in).ToUpper ();
 
-            if (a_group) {
+            if (a_group)
+            {
 
                 string[] ar = BitConverter.ToHex (a_in).ToUpper ().Split (new char[] { '-' });
 
                 hex = "";
 
-                for (int i = 0; i < ar.Length / 4; i++) {
+                for (int i = 0; i < ar.Length / 4; i++)
+                {
                     if (i != 0)
+                    {
                         hex += "-";
+                    }
                     hex += ar [i * 4] + ar [i * 4 + 1] + ar [i * 4 + 2] + ar [i * 4 + 3];
                 }
-            } else
+            } 
+            else
+            {
                 hex = hex.Replace ("-", "");
+            }
 
             return hex;
         }

@@ -1,0 +1,14 @@
+{
+  "RootNamespace": "Community",
+  "InternalsVisibleTo": [],
+  "Packages": [
+    "Fuse",
+    "FuseJS",
+    "Fuse.BasicTheme"
+  ],
+  "Projects": [],
+  "Includes": [
+    "*"
+  ],
+  
+}

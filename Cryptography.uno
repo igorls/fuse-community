@@ -3,7 +3,7 @@ using Uno.Collections;
 using Uno.IO;
 using Uno.Text;
 using Fuse;
-namespace Community.Cryptography
+namespace Cryptography
 {
     /*CODE ORIGINALLY
     FROM CODEPROJECT ARTICLE : http://www.codeproject.com/Articles/592275/OTP-One-Time-Password-Demystified
@@ -11,24 +11,24 @@ namespace Community.Cryptography
 
     PORTED TO UNO WITH BASIC REFACTORING: Sean McKay, 2015
     */
-        struct SHA_TRANSF
+    struct SHA_TRANSF
+    {
+        public  long A;
+        public  long B;
+        public  long C;
+        public  long D;
+        public  long E;
+
+        public  long T;
+        public  long[] W;
+        public  int idxW;
+
+        public new string ToString()
         {
-            public  long A;
-            public  long B;
-            public  long C;
-            public  long D;
-            public  long E;
-
-            public  long T;
-            public  long[] W;
-            public  int idxW;
-
-            public new string ToString()
-            {
-                return "::" + A + "::" + B + "::" + C + "::" + D + "::" + E + "::" + T + "::" + idxW;
-            }
-
+            return "::" + A + "::" + B + "::" + C + "::" + D + "::" + E + "::" + T + "::" + idxW;
         }
+
+    }
 
     public class mem
     {
@@ -83,27 +83,27 @@ namespace Community.Cryptography
             switch (n)
             {
                 case 1:
-                    {
-                        return andOrNot(x, y, z);
-                    }
+                {
+                    return andOrNot(x, y, z);
+                }
 
                 case 2:
-                    {
-                        return xorEm(x, y, z);
-                    }
+                {
+                    return xorEm(x, y, z);
+                }
 
                 case 3:
-                    {
-                        return andOr(x, y, z);
-                    }
+                {
+                    return andOr(x, y, z);
+                }
 
                 case 4:
-                    {
-                        return xorEm2(x, y, z);
-                    }
+                {
+                    return xorEm2(x, y, z);
+                }
 
                 default:
-                    throw new Exception("Wrong parameter");
+                throw new Exception("Wrong parameter");
             }
         }
 
@@ -158,7 +158,7 @@ namespace Community.Cryptography
         static void ModifyEA(int n, ref SHA_TRANSF t)
         {
             t.E = Mask32Bit(MaskedRotateLeft32Bit(t.T, 5) + f(n, t.A, t.B, t.C) + t.D + t.W[t.idxW++] + CONST[n - 1]);
-            long ta = t.A;
+            //long ta = t.A;
             t.A = MaskedRotateLeft32Bit(t.A, 30);
             //debug_log("TA: " + ta + " =RL30=> " + t.A);
         }
@@ -172,10 +172,9 @@ namespace Community.Cryptography
         static void ModifyCE(int n, ref SHA_TRANSF t)
         {
             t.C = Mask32Bit(MaskedRotateLeft32Bit(t.D, 5) + f(n, t.E, t.T, t.A) + t.B + t.W[t.idxW++] + CONST[n - 1]);
-            long te = t.E;
+            //long te = t.E;
             t.E = MaskedRotateLeft32Bit(t.E, 30);
             //debug_log("TE: " + te + " =RL30=> " + t.E);
-
         }
 
         static void ModifyBD(int n, ref SHA_TRANSF t)
@@ -225,7 +224,7 @@ namespace Community.Cryptography
                     ((tf.T << 8) & maskThirdByte) | // & 0x00ff0000) |
                     (((long)SHA512.shr(tfT ,8)) & maskSecondByte) | // 0x0000ff00) | 
                     (((long)SHA512.shr(tfT ,24)) & maskFirstByte); // & 0x000000ff);
-            }
+                }
 
             //HmacSha1.debugBytes(tf.W, "Initial W:");
             for (i = 16; i < 80; ++i)
@@ -451,7 +450,7 @@ namespace Community.Cryptography
             CONST[3] = long.Parse("3395469782");
 
         //#endregion
-        }
+    }
 
         /// <summary>
         /// Initialize the SHA digest
@@ -587,42 +586,43 @@ namespace Community.Cryptography
             data[63] = (byte)((lo_bit_count >> 0) & 0xff);
 //HmacSha1.debugBytes(digest, "BEFORE FINAL::MEM::TRANSFORM::DIGEST");
 
-            sha_transform();
+sha_transform();
 //HmacSha1.debugBytes(digest, "After FINAL::MEM::TRANSFORM::DIGEST");
-            result[0] = (byte)((digest[0] >> 24) & 0xff);
-            result[1] = (byte)((digest[0] >> 16) & 0xff);
-            result[2] = (byte)((digest[0] >> 8) & 0xff);
-            result[3] = (byte)((digest[0]) & 0xff);
-            result[4] = (byte)((digest[1] >> 24) & 0xff);
-            result[5] = (byte)((digest[1] >> 16) & 0xff);
-            result[6] = (byte)((digest[1] >> 8) & 0xff);
-            result[7] = (byte)((digest[1]) & 0xff);
-            result[8] = (byte)((digest[2] >> 24) & 0xff);
-            result[9] = (byte)((digest[2] >> 16) & 0xff);
-            result[10] = (byte)((digest[2] >> 8) & 0xff);
-            result[11] = (byte)((digest[2]) & 0xff);
-            result[12] = (byte)((digest[3] >> 24) & 0xff);
-            result[13] = (byte)((digest[3] >> 16) & 0xff);
-            result[14] = (byte)((digest[3] >> 8) & 0xff);
-            result[15] = (byte)((digest[3]) & 0xff);
-            result[16] = (byte)((digest[4] >> 24) & 0xff);
-            result[17] = (byte)((digest[4] >> 16) & 0xff);
-            result[18] = (byte)((digest[4] >> 8) & 0xff);
-            result[19] = (byte)((digest[4]) & 0xff);
+result[0] = (byte)((digest[0] >> 24) & 0xff);
+result[1] = (byte)((digest[0] >> 16) & 0xff);
+result[2] = (byte)((digest[0] >> 8) & 0xff);
+result[3] = (byte)((digest[0]) & 0xff);
+result[4] = (byte)((digest[1] >> 24) & 0xff);
+result[5] = (byte)((digest[1] >> 16) & 0xff);
+result[6] = (byte)((digest[1] >> 8) & 0xff);
+result[7] = (byte)((digest[1]) & 0xff);
+result[8] = (byte)((digest[2] >> 24) & 0xff);
+result[9] = (byte)((digest[2] >> 16) & 0xff);
+result[10] = (byte)((digest[2] >> 8) & 0xff);
+result[11] = (byte)((digest[2]) & 0xff);
+result[12] = (byte)((digest[3] >> 24) & 0xff);
+result[13] = (byte)((digest[3] >> 16) & 0xff);
+result[14] = (byte)((digest[3] >> 8) & 0xff);
+result[15] = (byte)((digest[3]) & 0xff);
+result[16] = (byte)((digest[4] >> 24) & 0xff);
+result[17] = (byte)((digest[4] >> 16) & 0xff);
+result[18] = (byte)((digest[4] >> 8) & 0xff);
+result[19] = (byte)((digest[4]) & 0xff);
 //HmacSha1.debugBytes(result, "After FINAL::RESULT");
 
-            return result;
-        }
+return result;
+}
 
-        public byte[] Final_dss_padding()
-        {
-            byte[] result = new byte[SHA_DIGESTSIZE];
+public byte[] Final_dss_padding()
+{
+    byte[] result = new byte[SHA_DIGESTSIZE];
 
-            int count;
-            long lo_bit_count, hi_bit_count;
+    int count;
+    long lo_bit_count;
+            //long hi_bit_count;
 
             lo_bit_count = count_lo;
-            hi_bit_count = count_hi;
+            //hi_bit_count = count_hi;
             count = (int)((lo_bit_count >> 3) & 0x3f);
             if (count > SHA_BLOCKSIZE)
             {
@@ -631,7 +631,7 @@ namespace Community.Cryptography
                 {
                     data[nI + count] = 0;
                 }
-               sha_transform();
+                sha_transform();
                 //mem._set(ref data, 0, 0, SHA_BLOCKSIZE);
                 for (int nI = 0; nI < SHA_BLOCKSIZE; nI++)
                 {
@@ -672,10 +672,7 @@ namespace Community.Cryptography
             return result;
         }
 
-        /// <summary>
-        /// Returns the version
-        /// </summary>
-        /// <returns></returns>
+        // Returns the version
         public static string    version()
         {
             return "SHA-1";
@@ -698,10 +695,7 @@ namespace Community.Cryptography
         }
     }
 
-
-    /// <summary>
-    /// This class provides the HMAC SHA1 algorithm
-    /// </summary>
+    // This class provides the HMAC SHA1 algorithm
     public class HmacSha1
     {
         private const int HMAC_SHA1_PAD_SIZE = 64;
@@ -739,7 +733,7 @@ namespace Community.Cryptography
                 key_len = HMAC_SHA1_DIGEST_SIZE;
             }
 
-            /*
+                /*
                * the HMAC_SHA1 transform looks like:
                *
                * SHA1(K XOR opad, SHA1(K XOR ipad, text))
@@ -770,7 +764,7 @@ namespace Community.Cryptography
             /*
                 * perform inner SHA1
                 */
-            sha_ctx.Init();
+                sha_ctx.Init();
             /* init context for 1st pass */
             /* start with inner pad      */
             sha_ctx.Update(k_ipad);
@@ -801,8 +795,8 @@ namespace Community.Cryptography
                 k_opad[i] ^= xorKeyInit;
             }
               */
-            for (i = 0; i < k_opad.Length; i++)
-            {
+              for (i = 0; i < k_opad.Length; i++)
+              {
                 k_opad[i] =(byte) (k_opad[i] ^ xorKeyInit);
             }
 
@@ -818,14 +812,14 @@ namespace Community.Cryptography
             /* then results of 1st hash  */
             sha_ctx.Update(digest);
             digest = sha_ctx.Final();         /* finish up 2nd pass        */
-                  debugBytes(digest, "After FINAL DIGEST");
+            debugBytes(digest, "After FINAL DIGEST");
             return digest;
         }
 
         public static void debugBytes<T>(T[] toPrint, string msg)
         {
-            
-                    StringBuilder sb = new StringBuilder();
+
+            StringBuilder sb = new StringBuilder();
             foreach(T b in toPrint)
             {
                 sb.Append(b.ToString());
@@ -859,7 +853,10 @@ namespace Community.Cryptography
 
             if (secret != null)
             {
+                debug_log("Secret key is not null");
+                debug_log(secret);
                 byte[] secretKey = Uno.Text.Utf8.GetBytes(secret);
+                debug_log(secretKey.Length);
                 if (secretKey.Length < SECRETLENGTH)
                 {
                     throw new Exception(MSG_SECRETLENGTH);
@@ -868,7 +865,10 @@ namespace Community.Cryptography
                 this._secretKey = secretKey;
             }
             else
+            {
+                debug_log("Secret key is null!");
                 this._secretKey = getDefaultSecretKey();
+            }
 
             if (counter < 1)
             {
@@ -890,7 +890,7 @@ namespace Community.Cryptography
                 this._secretKey = secretKey;
             }
             else
-                this._secretKey = getDefaultSecretKey();
+            this._secretKey = getDefaultSecretKey();
 
             if (counter < 1)
             {
@@ -904,29 +904,10 @@ namespace Community.Cryptography
         {
             return new byte[]
             {
-                0x30,
-                0x31,
-                0x32,
-                0x33,
-                0x34,
-                0x35,
-                0x36,
-                0x37,
-                0x38,
-                0x39,
-                0x3A,
-                0x3B,
-                0x3C,
-                0x3D,
-                0x3E,
-                0x3F,
-                0x40,
-                0x41,
-                0x42,
-                0x43
+                0x30,0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,0x39,
+                0x3A,0x3B,0x3C,0x3D,0x3E,0x3F,0x40,0x41,0x42,0x43
             };
         }
-
 
         private static int getChecksum(int codeDigits)
         {
@@ -938,17 +919,13 @@ namespace Community.Cryptography
             int digitTens = (codeDigits / 10) % 10;
             int digitOnes = codeDigits % 10;
             return (10 -
-            ((_checksumSkipTable[digitMillions] + digitHundredThousands +
-            _checksumSkipTable[digitTenThousands] + digitThousands +
-            _checksumSkipTable[digitHundreds] + digitTens +
-            _checksumSkipTable[digitOnes]) % 10)) % 10;
+                ((_checksumSkipTable[digitMillions] + digitHundredThousands +
+                    _checksumSkipTable[digitTenThousands] + digitThousands +
+                    _checksumSkipTable[digitHundreds] + digitTens +
+                    _checksumSkipTable[digitOnes]) % 10)) % 10;
         }
 
-        /// <summary>
-        /// Formats the OneTimePassword. This is the OneTimePassword algorithm.
-        /// </summary>
-        /// <param name="hmac">HMAC value</param>
-        /// <returns>8 digits OTP</returns>
+        // Formats the OneTimePassword. This is the OneTimePassword algorithm.
         private static string FormatOneTimePassword(byte[] hmac)
         {
 
@@ -962,9 +939,9 @@ namespace Community.Cryptography
             //debug_log "HMAC::" + sb.ToString();
             int offset = hmac[19] & 0xf;
             int bin_code = (hmac[offset] & 0x7f) << 24
-                           | (hmac[offset + 1] & 0xff) << 16
-                           | (hmac[offset + 2] & 0xff) << 8
-                           | (hmac[offset + 3] & 0xff);
+            | (hmac[offset + 1] & 0xff) << 16
+            | (hmac[offset + 2] & 0xff) << 8
+            | (hmac[offset + 3] & 0xff);
 
             int Code_Digits = bin_code % 10000000;
             int csum = getChecksum(Code_Digits);
@@ -1000,10 +977,7 @@ namespace Community.Cryptography
             }
         }
 
-        /// <summary>
-        /// Set the OTP secret
-        /// </summary>
-        /// <param name="secret"></param>
+        // Set the OTP secret
         public byte[] Secret
         {
             set
@@ -1017,19 +991,13 @@ namespace Community.Cryptography
             }
         }
 
-        /// <summary>
-        /// Get the current one time password value
-        /// </summary>
-        /// <returns></returns>
+        // Get the current one time password value
         public string GetCurrent()
         {
             return FormatOneTimePassword(HmacSha1.GetHmacSha1Bytes(_secretKey, CounterArray));
         }
 
-        /// <summary>
-        /// Get the next OTP value
-        /// </summary>
-        /// <returns></returns>
+        // Get the next OTP value
         public string GetNextOneTimePassword()
         {
             // increment the counter
@@ -1038,10 +1006,7 @@ namespace Community.Cryptography
             return GetCurrent();
         }
 
-        /// <summary>
-        /// Get the counter value
-        /// </summary>
-        /// <returns></returns>
+        // Get the counter value
         public ulong Counter
         {
             get
@@ -1053,17 +1018,20 @@ namespace Community.Cryptography
             {
                 _counter = value;
             }
-        } //Counter
-    } //OnteTimePassword
+        }
+    }
 
 
-public class BitConverter
+    public class BitConverter
     {
-            
+
         public static string ToHex(byte[] bytes)
         {
+
             StringBuilder sbResult = new StringBuilder();
-            for (int i=0; i<bytes.Length; i++) {
+
+            for (int i=0; i<bytes.Length; i++)
+            {
                 sbResult.Append(String.Format("{0:x2}", bytes[i]));
             }
             return sbResult.ToString().ToUpper();
@@ -1106,105 +1074,115 @@ public class BitConverter
                 }
             }
             return 0;
-        }//ToUInt64
-    }//BitConverter
+        }
+    }
 
     public class Tester {
 
-      /* naive shr that doesn't work due to bug in Uno. */
-      public static ulong shr(ulong n, uint shiftwidth) {
-        //return n >> shiftwidth;  // triggers the bug
-        for (uint i=0; i<shiftwidth; i++) {
-          n = n / 2;  // also triggers the bug
-        };
-        return n;
-      }
-/*
-      public static byte[] getBytes(ulong n)
-      {
-        byte[] bits = new byte[64];
-        // clear array
-        for (int i=0; i<64; i++) { bits[i] = 0; };
-        // set bits
-        for (int i=0; i<64; i++) {
-          byte byteval = ((n & (1ul<<i)) > 0) ? (byte)1 : (byte)0;
-          bits[63-i] = byteval;
-        };
-
-        int baseLine = 0;
-        byte[] result = new byte[8];
-        for(int iByte =0; iByte < 8; iByte++)
-        {   
-            byte curValue = 0;
-            baseLine = 8*iByte;
-
-            for(int offset = 0; offset < 8; offset++)
+        /* naive shr that doesn't work due to bug in Uno. */
+        public static ulong shr(ulong n, uint shiftwidth)
+        {
+            //return n >> shiftwidth;
+            // triggers the bug
+            for (uint i=0; i<shiftwidth; i++)
             {
-                byte bit = bits[baseLine + offset];
-                curValue = (byte)(curValue<<1) + bit;
+                n = n / 2;
             }
-            result[iByte] = curValue;
+            return n;
         }
-        return result;
-      }*/
 
-      public static ulong shr2(ulong n, int shiftwidth) {
-        ulong result = 0;
-        int[] bytes = new int[64];
-        // clear array
-        for (int i=0; i<64; i++) { bytes[i] = 0; };
-        // set bytes
-        for (int i=0; i<64; i++) {
-          int byteval = ((n & (1ul<<i)) > 0) ? 1 : 0;
-          bytes[63-i] = byteval;
-        };
+        /*
+        public static byte[] getBytes(ulong n)
+        {
+            byte[] bits = new byte[64];
+            // clear array
+            for (int i=0; i<64; i++) { bits[i] = 0; };
+            // set bits
+            for (int i=0; i<64; i++) {
+              byte byteval = ((n & (1ul<<i)) > 0) ? (byte)1 : (byte)0;
+              bits[63-i] = byteval;
+            };
 
-        /*string s = "";
-        for(int i=0; i<64; i++) {
-          s = s + bytes[i].ToString();
+            int baseLine = 0;
+            byte[] result = new byte[8];
+            for(int iByte =0; iByte < 8; iByte++)
+            {   
+                byte curValue = 0;
+                baseLine = 8*iByte;
+
+                for(int offset = 0; offset < 8; offset++)
+                {
+                    byte bit = bits[baseLine + offset];
+                    curValue = (byte)(curValue<<1) + bit;
+                }
+                result[iByte] = curValue;
+            }
+            return result;
         }
-        debug_log "Bytes array:" + s;
         */
 
-        // shift right n places
-        for (int i=63; i>=0; i--) {
-          if (i-shiftwidth >= 0)
-            bytes[i] = bytes[i-shiftwidth];
-          else
-            bytes[i] = 0;
+        public static ulong shr2(ulong n, int shiftwidth)
+        {
+            ulong result = 0;
+            int[] bytes = new int[64];
+
+            // clear array
+            for (int i=0; i<64; i++)
+            {
+                bytes[i] = 0;
+            }
+
+            // set bytes
+            for (int i=0; i<64; i++)
+            {
+              int byteval = ((n & (1ul<<i)) > 0) ? 1 : 0;
+              bytes[63-i] = byteval;
+            }
+
+            // shift right n places
+            for (int i=63; i>=0; i--)
+            {
+              if (i-shiftwidth >= 0)
+              {
+                bytes[i] = bytes[i-shiftwidth];
+              }
+              else
+              {
+                bytes[i] = 0;
+              }
+            }
+
+            // reconstruct new ulong
+            for (int i=0; i<64; i++)
+            {
+              result = result * 2 + bytes[i];
+            }
+            return result;
         }
 
-        // reconstruct new ulong
-        for (int i=0; i<64; i++) {
-          result = result * 2 + bytes[i];
+        public static void test_shr(ulong n)
+        {
+            debug_log n.ToString() + "====>" + shr2(n,6).ToString();
         }
-        return result;
-      }
 
-      public static void test_shr(ulong n)
-      {
-        debug_log n.ToString() + "====>" + shr2(n,6).ToString();
-      }
+        public static void testAll()
+        {
+            test_shr(0);
+            test_shr(120);
+            test_shr(3391362420264868341);
+            test_shr(8247344706571482433);
+            test_shr(11170817084526286401);
 
-      public static void testAll()
-      {
-        test_shr(0);
-        test_shr(120);
-        test_shr(3391362420264868341);
-        test_shr(8247344706571482433);
-        test_shr(11170817084526286401);
+            /* these are the results we get:
+            n====>result
+            0====>0
+            120====>1
+            3391362420264868341====>52990037816638567
+            8247344706571482433====>128864761040179413
+            11170817084526286401====> 18333057714503563097
+            // this last one is incorrect... should be: 174544016945723225
+            */
 
-        /* these are the results we get:
-        n====>result
-        0====>0
-        120====>1
-        3391362420264868341====>52990037816638567
-        8247344706571482433====>128864761040179413
-        11170817084526286401====> 18333057714503563097
-        // this last one is incorrect... should be: 174544016945723225
-        */
-
-      }
-    } // Tester
-
-}//Namespace
+        }
+    }
+}
