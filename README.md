@@ -9,7 +9,7 @@ Currently contains:
 1. Sha1, HmacSha1, and OneTimePassword from http://www.codeproject.com/Articles/592275/OTP-One-Time-Password-Demystified
 2. SHA256 from http://hashlib.codeplex.com/
 
-3. SHA512
+3. SHA512 from mono
 
 In addition, it contains sample code for using the libraries.
 
