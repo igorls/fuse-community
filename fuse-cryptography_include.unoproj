@@ -1,3 +1,12 @@
- "Includes": [
-    "*.uno"
-  ],
+{
+	"Name":"FuseCryptographyLib",
+	"RootNamespace":"",
+	"Packages": [
+		"Fuse",
+		"FuseJS"
+	],
+	"Includes": [
+		"*.uno"
+	],
+	"Version": "0.2.0"
+}

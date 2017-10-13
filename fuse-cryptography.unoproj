@@ -1,5 +1,5 @@
 {
-  "RootNamespace": "Community",
+  "RootNamespace": "FuseCryptography",
   "InternalsVisibleTo": [],
   "Packages": [
     "Fuse",
@@ -9,6 +9,5 @@
   "Projects": [],
   "Includes": [
     "*"
-  ],
-  
+  ]
 }
